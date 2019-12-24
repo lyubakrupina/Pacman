@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "menu.h"
 void menu(RenderWindow & window) 
 {
@@ -46,6 +47,8 @@ void menu(RenderWindow & window)
 		window.draw(menu2);
 		window.draw(menu3);
 		
+
+
 		window.display();
 	}
 	////////////////////////////////////////////////////
