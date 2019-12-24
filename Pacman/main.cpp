@@ -135,11 +135,11 @@ bool startGame(){
 
 		if (p.life) gameTime =gameTimeClock.getElapsedTime().asSeconds();
 		clock.restart(); 
-		time = time / 800;
+		time = time / 2000;
 
 
 		createObjectForMapTimer += time;//наращиваем таймер
-		if (createObjectForMapTimer>800)
+		if (createObjectForMapTimer>2000)
 		{
 			for (it =enemies.begin();it!=enemies.end();it++)
 			{
@@ -328,12 +328,12 @@ bool startGame(){
 
 
 		//ТЕКСТ В ИГРЕ объявили переменную здоровья,времени и баллов 
-		std::ostringstream playerHealthString, gameTimeString, playerScoreString;
+		std::ostringstream playerHealthString, playerScoreString;
 		
 		playerHealthString << p.health; 
-		gameTimeString << gameTime; //формируем строку 
+		 //формируем строку 
 		playerScoreString << p.playerScore; 
-		text.setString("Здоровье: " + playerHealthString.str() + "\nВремя игры: " + gameTimeString.str() + "\nБаллы: " + playerScoreString.str());//задаем строку тексту 
+		text.setString("Здоровье: " + playerHealthString.str() +  "\nБаллы: " + playerScoreString.str());//задаем строку тексту 
 		text.setPosition(3, 0);//задаем позицию текста 
 		window.draw(text);//рисуем этот текст
 		window.draw(p.sprite);//выводим спрайт на экран
