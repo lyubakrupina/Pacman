@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Entity.h"
 #include "Enemy.h"
 #include "Bullet.h"
 using namespace sf;
