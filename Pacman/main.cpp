@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <sstream>
 #include "Entity.h"
@@ -6,6 +7,7 @@
 #include "Enemy.h"
 #include "Bullet.h"
 #include "menu.h"
+
 #include "map.h" //подключили код с картой
 #include <list>
 using namespace sf;//включаем пространство имен sf, чтобы постоянно не писать sf::
@@ -48,7 +50,10 @@ if (TileMap[randomElementY][randomElementX] == ' ') {
 }
 }
 };
-				
+
+
+
+
 bool startGame(){
 	//Создаём окно 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -64,8 +69,12 @@ bool startGame(){
 	Text text("",font,23);
 	text.setColor(Color::Red);//покрасили текст в красный 
 	text.setStyle(Text::Bold);//жирный текст. 
- 
- 
+	
+    Music music;
+	music.openFromFile("What.ogg");
+	music.play();
+
+
 	Image map_image;//объект изображения для карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл для карты
 	
@@ -161,6 +170,7 @@ bool startGame(){
 						for (int i = 0; i < k; i++)
 						{
 							Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
+							
 							if (k>5)
 							{
 							  const int k=0;
@@ -170,6 +180,7 @@ bool startGame(){
 					
 					
 					}
+
 				
 				}
 			}
@@ -313,11 +324,13 @@ void gameRunning() //функция перезагружает игру
 	if (startGame()) 
 	{
 		gameRunning();
+		
 
 	}
 }
 int main() 
 {
 	gameRunning();
+	
 	return 0;
 }
