@@ -82,6 +82,7 @@ int main()
 
 	std::list<Entity*> enemies;
 	std::list<Entity*>::iterator it; // список врагов
+	std::list<Entity*>::iterator it2; // дл€ отталкивани€ между врагами
 	std::list<Entity*> Bullets; //список пуль
 
 
@@ -170,7 +171,7 @@ int main()
 	
 		
 		
-		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml, // передава€ врем€ в качестве параметра функции update.
+		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
 		
 
 		//ќ∆»¬Ћя≈ћ ¬–ј√ќ¬
@@ -178,6 +179,8 @@ int main()
 			{   
 				(*it)->update(time); //запускаем метод update()  
 			} 
+		
+		
 		//ќ∆»¬Ћя≈ћ ѕ”Ћ»
 		for (it = Bullets.begin(); it != Bullets.end(); it++) 
 		{ 
@@ -246,6 +249,8 @@ int main()
 			}
 
 		
+
+
 		//“≈ —“ ¬ »√–≈ объ€вили переменную здоровь€,времени и баллов 
 		std::ostringstream playerHealthString, gameTimeString, playerScoreString;
 		
@@ -257,6 +262,18 @@ int main()
 		window.draw(text);//рисуем этот текст
 		window.draw(p.sprite);//выводим спрайт на экран
 
+
+
+
+		//	for (it2 = enemies.begin(); it2 != enemies.end(); it2++)
+		//	{
+		//		if ((*it)->getRect() != (*it2)->getRect())//при этом это должны быть разные пр€моугольники
+		//		if (((((*it)->getRect().intersects((*it2)->getRect())) && ((*it)->name == "PSH1") && ((*it2)->name == "PSH2")) && ((*it2)->name == "PSH3")))//если столкнулись два объекта и они враги
+		//		{
+		//			(*it)->dx *= -0.05;//мен€ем направление движени€ врага
+		//			(*it)->sprite.scale(-1, 1);//отражаем спрайт по горизонтали
+			//	}
+			//}
 
 
 		//–»—”≈ћ ¬–ј√ќ¬
