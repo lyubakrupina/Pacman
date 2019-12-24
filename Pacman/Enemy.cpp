@@ -1,12 +1,15 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Enemy.h"
 #include "Bullet.h"
 using namespace sf;
+using namespace std;
 
-		Enemy::Enemy(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name){
+		Enemy::Enemy(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name)
+		{
 		
-		//if (name == "Psh1")
-		//{ 
+		if ((name == "PSH1")||(name == "PSH2")||(name == "PSH3"))
+		{ 
 			//Задаем спрайту один прямоугольник для //вывода одного игрока. IntRect – для приведения типов 
 			//image.createMaskFromColor(Color(255, 255, 255));
 		//image.createMaskFromColor(Color(0, 0, 0));
@@ -16,8 +19,15 @@ using namespace sf;
 			
 			speed = 0.05;
 				dx = speed;
-		//}
-	}
+		}
+		
+		}
+		Enemy::~Enemy()
+		{
+			cout << "udalilas vrag";
+			system("pause");
+		}
+
 	void Enemy::checkCollisionWithMap (float Dx, float Dy)
 	{
 		for (int i = y / 40; i < (y + h) / 40; i++)//проходимся по элементам карты    
@@ -53,8 +63,8 @@ using namespace sf;
 	}
 	void Enemy::update(float time)  
 	{   
-		//if (name == "EasyEnemy")
-		//{//для персонажа с таким именем логика будет такой 
+		if ((name == "PSH1")||(name == "PSH2")||(name == "PSH3"))
+		{  //для персонажа с таким именем логика будет такой 
  
 		if (life) 
 		{//проверяем, жив ли герой   
@@ -108,6 +118,8 @@ using namespace sf;
 		{ 
 			life = false;
 		}//если жизней меньше 0, либо равно 0, то умираем  
-//	}  
+	}  
 	} 
-	} //класс Enemy закрыт 
+	} 
+//класс Enemy закрыт 
+	

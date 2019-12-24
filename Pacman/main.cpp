@@ -112,16 +112,9 @@ int main()
 			enemiesCount += 1; //увеличили счЄтчик врагов 
 	} 
 
-
-	
-
-	
 	
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как им€ файла+расширение, далее координата ’,”, ширина, высота.
 	
-	//Enemy Psh1(EnemyImageSh1, 80, 80, 40.0, 40.0,"PSH1");
-	//Enemy Psh2(EnemyImage, 80, 80, 40.0, 40.0,"PSH2");
-	//Enemy Psh3(EnemyImage, 80, 80, 40.0, 40.0,"PSH3");
 
 
 	int createObjectForMapTimer = 0;//ѕеременна€ под врем€ дл€ генерировани€ камней
@@ -152,7 +145,7 @@ int main()
 		{ 
 			if (event.type == sf::Event::Closed) 
 				window.close();
-										//стрел€ем по нажатию клавиши "P" 
+										
 				
 				if (p.znachenie == false)
 			{	
@@ -179,11 +172,13 @@ int main()
 		
 		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml, // передава€ врем€ в качестве параметра функции update.
 		
+
+		//ќ∆»¬Ћя≈ћ ¬–ј√ќ¬
 		for  (it = enemies.begin(); it != enemies.end(); it++)   
 			{   
 				(*it)->update(time); //запускаем метод update()  
 			} 
-
+		//ќ∆»¬Ћя≈ћ ѕ”Ћ»
 		for (it = Bullets.begin(); it != Bullets.end(); it++) 
 		{ 
 			(*it)->update(time); //запускаем метод update() 
@@ -213,15 +208,13 @@ int main()
 								std::cout << "you are lose";  
 							}    
 					}   
-				//for (it = enemies.begin(); it != enemies.end(); it++)
-				//{
-					//if ((*it)->getRect()) //&&(enemies.getRect().intersecrs((*it)->getRect()))))) 
-					//{
-						//p.health = 0;
-						//p.life = false;
-					//	std::cout << "you are lose";
+			//	for (it = enemies.begin(); it != enemies.end(); it++)
+			//	{
+				//	if ((Bullets.getRect().intersects((*it)->getRect()) //&&(enemies.getRect().intersecrs((*it)->getRect()))))) 
+				//	{
 						
-					//}
+						
+				//	}
 				
 			//	}
 			} 

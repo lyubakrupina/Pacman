@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Bullet.h"
 #include "Entity.h"
 using namespace sf;
-
-
+using namespace std;
 
 	Bullet::Bullet(Image &image, float X, float Y, int W, int H, std::string Name, int dir) :Entity(image, X, Y, W, H, Name)
 	{ 
@@ -13,6 +13,12 @@ using namespace sf;
 			speed = 0.8; 
 			w = h = 16; 
 			life = true; //выше инициализация в конструкторе 
+	}
+
+	Bullet::~Bullet()
+	{
+		cout<<"udalilas pulya";
+		system("pause");
 	}
 
 
