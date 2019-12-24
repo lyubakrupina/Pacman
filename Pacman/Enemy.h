@@ -9,7 +9,7 @@ class Enemy:public Entity {
 public:
 
 	int direction;
-	
+	float timeBeforeShot;
 	Enemy(Image &image, float X, float Y, int W, int H, std::string Name);
 	~Enemy();	
 	

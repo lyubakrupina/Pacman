@@ -17,6 +17,6 @@ public:
 	Bullet(Image &image, float X, float Y, int W, int H, std::string Name, int dir) ;
 	~Bullet();
 		void update(float time) ;
-		FloatRect getRect();
+	//	FloatRect getRect();
 };
 #endif // __BULLET_H__

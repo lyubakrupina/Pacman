@@ -17,7 +17,7 @@ using namespace std;
 		
 			sprite.setTextureRect(IntRect(0, 0, w, h)); 
 			direction = rand() % (3);
-			
+			health=100;
 			speed = 0.05;
 				dx = speed;
 		}
@@ -26,7 +26,7 @@ using namespace std;
 		Enemy::~Enemy()
 		{
 			cout << "udalilas vrag";
-			system("pause");
+			
 		}
 
 	void Enemy::checkCollisionWithMap (float Dx, float Dy)

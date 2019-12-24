@@ -7,6 +7,7 @@ using namespace std;
 		Pacman::Pacman(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name){
 		playerScore = 0; 
 		state = stay;
+		health=100;
 		znachenie = true;
 		if (name == "Packman")
 		{ 
@@ -21,7 +22,7 @@ using namespace std;
 		Pacman::~Pacman()
 		{
 			cout << "udalilas igrok";
-			system("pause");
+		
 		}
 
 	void 	Pacman::control(){
@@ -213,5 +214,6 @@ using namespace std;
 		speed = 0; //обнуляем скорость, чтобы персонаж остановился. 
 		sprite.setPosition(x, y); //выводим спрайт в позицию (x, y). 
 			//бесконечно выводим в этой функции, иначе бы наш спрайт стоял на месте.
+		if (health<=0){life=false;}
 	}
 	}
