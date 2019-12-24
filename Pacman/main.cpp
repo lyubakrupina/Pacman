@@ -3,6 +3,9 @@
 #include <sstream>
 #include "Entity.h"
 #include "Pacman.h"
+#include "Enemy.h"
+#include "Bullet.h"
+#include "menu.h"
 #include "map.h" //подключили код с картой
 #include <list>
 using namespace sf;//включаем пространство имен sf, чтобы посто€нно не писать sf::
@@ -51,9 +54,20 @@ int main()
 {
 	//—оздаЄм окно 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	//RenderWindow window(sf::VideoMode(822, 600), "Kychka-pc.ru 31");
 	sf::RenderWindow window(sf::VideoMode(800, 600, desktop.bitsPerPixel), "Pacman");
 
-
+	
+	menu(window);//вызов меню
+	
+	// “≈ —“ ¬ »√–≈
+	Font font;
+	font.loadFromFile("CyrilicOld.ttf");
+	Text text("",font,23);
+	text.setColor(Color::Red);//покрасили текст в красный 
+	text.setStyle(Text::Bold);//жирный текст. 
+ 
+ 
 	Image map_image;//объект изображени€ дл€ карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл дл€ карты
 	
@@ -66,11 +80,50 @@ int main()
 	Clock gameTimeClock;//переменна€ игрового времени, будем здесь хранить врем€ игры 
 	int gameTime = 0;//объ€вили игровое врем€, инициализировали.
 
-	Image PackmanImage;
-	PackmanImage.loadFromFile("images/Pacman.png"); // загружаем изображение игрока
+	std::list<Entity*> enemies;
+	std::list<Entity*>::iterator it; // список врагов
+	std::list<Entity*> Bullets; //список пуль
 
+
+	Image PackmanImage;
+	Image EnemyImageSh1;
+	Image EnemyImageSh2;
+	Image EnemyImageSh3;
+	Image BulletImage;//изображение дл€ пули 
+	
+	PackmanImage.loadFromFile("images/Pacman2.png"); // загружаем изображение игрока
+	EnemyImageSh1.loadFromFile("images/PSH1.png");
+	EnemyImageSh2.loadFromFile("images/PSH2.png");
+	EnemyImageSh3.loadFromFile("images/PSH3.png");
+	BulletImage.loadFromFile("images/Bullet.png");
+	
+	
+	const int ENEMY_COUNT = 2; //максимальное количество врагов в игре 
+	int enemiesCount = 0; 
+
+	for (int i = 0; i < ENEMY_COUNT; i++) 
+		{ 
+			float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ 
+			float yr = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УyФ  //создаем врагов и помещаем в список  
+			enemies.push_back(new Enemy(EnemyImageSh1, xr, yr, 40, 40, "PSH1"));  
+			enemies.push_back(new Enemy(EnemyImageSh2, xr, yr, 40, 40, "PSH2"));
+			enemies.push_back(new Enemy(EnemyImageSh3, xr, yr, 40, 40, "PSH3"));
+			
+			enemiesCount += 1; //увеличили счЄтчик врагов 
+	} 
+
+
+	
+
+	
+	
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как им€ файла+расширение, далее координата ’,”, ширина, высота.
 	
+	//Enemy Psh1(EnemyImageSh1, 80, 80, 40.0, 40.0,"PSH1");
+	//Enemy Psh2(EnemyImage, 80, 80, 40.0, 40.0,"PSH2");
+	//Enemy Psh3(EnemyImage, 80, 80, 40.0, 40.0,"PSH3");
+
+
 	int createObjectForMapTimer = 0;//ѕеременна€ под врем€ дл€ генерировани€ камней
 	int createObjectForMapTimer1 = 0;//ѕеременна€ под врем€ дл€ генерировани€ камней
 	while (window.isOpen())
@@ -93,17 +146,86 @@ int main()
 			randomMapGenerate1();//генераци€ камней
 			createObjectForMapTimer1 = 0;//обнул€ем таймер
 		}
+	
 		sf::Event event; 
 		while (window.pollEvent(event)) 
-		{
+		{ 
 			if (event.type == sf::Event::Closed) 
-				window.close(); 
+				window.close();
+										//стрел€ем по нажатию клавиши "P" 
+				
+				if (p.znachenie == false)
+			{	
+				p.update(time); //обновл€ем его
+
+				//p.timeBeforeShot += time; //приращаем врем€ до выстрела
+				
+				if (event.type == sf::Event::KeyPressed) 
+				{ 
+					//if (p.timeBeforeShot<500){
+					if (event.key.code == sf::Keyboard::P) 
+					{
+					
+					Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
+					} 
+				
+				}
+			}
 		}
+			
+		
+	
 		
 		
+		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml, // передава€ врем€ в качестве параметра функции update.
 		
+		for  (it = enemies.begin(); it != enemies.end(); it++)   
+			{   
+				(*it)->update(time); //запускаем метод update()  
+			} 
+
+		for (it = Bullets.begin(); it != Bullets.end(); it++) 
+		{ 
+			(*it)->update(time); //запускаем метод update() 
+		}
+
+
+		//ѕровер€ем список на наличие "мертвых" пуль и удал€ем их 
+		for (it = Bullets.begin(); it != Bullets.end(); )//говорим что проходимс€ от начала до конца 
+		{// если этот объект мертв, то удал€ем его 
+			if ((*it)-> life == false) 
+			{ 
+				delete (*it);
+				it = Bullets.erase(it); 
+			} 
+			else it++; //и идем курсором (итератором) к след объекту. 
+		}
+
+
+		if (p.life == true)
+			{//если игрок жив  
+				for (it = enemies.begin(); it != enemies.end(); it++)
+					{//бежим по списку врагов   
+						if ((p.getRect().intersects((*it)->getRect())))     
+							{      
+								p.health = 0;  
+								p.life = false;
+								std::cout << "you are lose";  
+							}    
+					}   
+				//for (it = enemies.begin(); it != enemies.end(); it++)
+				//{
+					//if ((*it)->getRect()) //&&(enemies.getRect().intersecrs((*it)->getRect()))))) 
+					//{
+						//p.health = 0;
+						//p.life = false;
+					//	std::cout << "you are lose";
+						
+					//}
+				
+			//	}
+			} 
 		
-		p.update(time); //оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml, // передава€ врем€ в качестве параметра функции update.
 		window.clear(); 
 
 		/////////////////////////////–исуем карту/////////////////////
@@ -119,7 +241,7 @@ int main()
 					if ((TileMap[i][j] == '0')) 
 						s_map.setTextureRect(IntRect(80, 0, 40, 40));//если
 					//встретили символ 0, то рисуем 3й квадратик
-				if ((TileMap[i][j] == 'f')) 
+					if ((TileMap[i][j] == 'f')) 
 				
 					s_map.setTextureRect(IntRect(120, 0, 40, 40));
 					
@@ -130,8 +252,39 @@ int main()
 						window.draw(s_map);//рисуем квадратики на экран
 			}
 
-
+		
+		//“≈ —“ ¬ »√–≈ объ€вили переменную здоровь€,времени и баллов 
+		std::ostringstream playerHealthString, gameTimeString, playerScoreString;
+		
+		playerHealthString << p.health; 
+		gameTimeString << gameTime; //формируем строку 
+		playerScoreString << p.playerScore; 
+		text.setString("«доровье: " + playerHealthString.str() + "\n¬рем€ игры: " + gameTimeString.str() + "\nЅаллы: " + playerScoreString.str());//задаем строку тексту 
+		text.setPosition(3, 0);//задаем позицию текста 
+		window.draw(text);//рисуем этот текст
 		window.draw(p.sprite);//выводим спрайт на экран
+
+
+
+		//–»—”≈ћ ¬–ј√ќ¬
+		for (it = enemies.begin(); it != enemies.end(); it++)
+			{ 
+				if ((*it)->life)
+				window.draw((*it)->sprite); //рисуем enemies объекты 
+			}
+
+		//–»—”≈ћ ѕ”Ћ»
+		for (it = Bullets.begin(); it != Bullets.end(); it++) 
+			{ 
+
+				if ((*it)->life) //если пули живы 
+				window.draw((*it)->sprite); //рисуем объекты
+			}
+
+		
+
+
+
 		window.display(); 
 	}
 return 0;

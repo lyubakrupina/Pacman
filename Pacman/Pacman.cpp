@@ -1,9 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include "Pacman.h"
+#include "Bullet.h"
 using namespace sf;
 
 		Pacman::Pacman(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name){
-		playerScore = 0; state = stay;
+		playerScore = 0; 
+		state = stay;
+		znachenie = true;
 		//if (name == "Packman"){ 
 			//«адаем спрайту один пр€моугольник дл€ //вывода одного игрока. IntRect Ц дл€ приведени€ типов 
 			//image.createMaskFromColor(Color(255, 255, 255));
@@ -130,21 +133,28 @@ using namespace sf;
 				}
 				if (TileMap[i][j] == 'f')//таблетки
 				{
+					znachenie = false;
 					TileMap[i][j] = ' ';
 				}
+
 				if (TileMap[i][j] == 'h')//точки 
 				{
+					playerScore ++; 
 					TileMap[i][j] = ' ';
 				}
 			}
+			
+
 	}
 	
 
 	void 	Pacman::update(float time) //метод "оживлени€/обновлени€" объекта класса.
-	{
+	
+	{if (life) {//провер€ем, жив ли герой
+
 		control();//функци€ управлени€ персонажем 
 		switch (state)//делаютс€ различные действи€ в зависимости от состо€ни€ 
-		{
+		{ 
 			case right: 
 				{
 					dx = speed; 
@@ -196,4 +206,5 @@ using namespace sf;
 		speed = 0; //обнул€ем скорость, чтобы персонаж остановилс€. 
 		sprite.setPosition(x, y); //выводим спрайт в позицию (x, y). 
 			//бесконечно выводим в этой функции, иначе бы наш спрайт сто€л на месте.
+	}
 	}
