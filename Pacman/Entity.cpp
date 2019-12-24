@@ -1,9 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
+#include <iostream>
 using namespace sf;
+using namespace std;
 	Entity::Entity(Image &image, float X, float Y, int W, int H, std::string Name){ 
 		x = X; y = Y; //координата появления спрайта
 		w = W; h = H;
+		name = Name;
 		dx = 0; dy = 0; speed = 0;
 		CurrentFrame = 0;
 		health = 100; life = true; //инициализировали логическую переменную жизни, герой жив
@@ -11,6 +14,11 @@ using namespace sf;
 		sprite.setTexture(texture); //заливаем спрайт текстурой 
 	}
 
+	Entity::~Entity()
+		{
+			cout << "udalilas syshnist";
+			
+		}
 	FloatRect Entity:: getRect(){
 		//метод получения прямоугольника. его коорд, размеры (шир,высот).
 		FloatRect FR(x, y, w, h); // переменная FR типа FloatRect

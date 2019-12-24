@@ -12,7 +12,8 @@ using namespace sf;//включаем пространство имен sf, чтобы посто€нно не писать sf
 
 void randomMapGenerate(){
 //рандомно расставл€ем камни
-int randomElementX = 0;//переменна€ дл€ хранени€ случайного элемента по горизонтали
+int randomElementX 
+	= 0;//переменна€ дл€ хранени€ случайного элемента по горизонтали
 int randomElementY = 0;//переменна€ дл€ хранени€ случайного элемента по вертикали
 srand(time(0));//»нициализаци€ генератора случайных чисел
 int countStone = 3;//количество таблеток
@@ -49,9 +50,9 @@ if (TileMap[randomElementY][randomElementX] == ' ') {
 }
 };
 				
-
-int main() 
-{
+bool startGame(){
+	srand (time(NULL));
+	//int DeadEnemyGame=0;
 	//—оздаЄм окно 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	//RenderWindow window(sf::VideoMode(822, 600), "Kychka-pc.ru 31");
@@ -66,7 +67,7 @@ int main()
 	Text text("",font,23);
 	text.setColor(Color::Red);//покрасили текст в красный 
 	text.setStyle(Text::Bold);//жирный текст. 
- 
+
  
 	Image map_image;//объект изображени€ дл€ карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл дл€ карты
@@ -84,7 +85,7 @@ int main()
 	std::list<Entity*>::iterator it; // список врагов
 	std::list<Entity*>::iterator it2; // дл€ отталкивани€ между врагами
 	std::list<Entity*> Bullets; //список пуль
-
+	std::list<Entity*> Bullets2;
 
 	Image PackmanImage;
 	Image EnemyImageSh1;
@@ -97,6 +98,7 @@ int main()
 	EnemyImageSh2.loadFromFile("images/PSH2.png");
 	EnemyImageSh3.loadFromFile("images/PSH3.png");
 	BulletImage.loadFromFile("images/Bullet.png");
+
 	
 	
 	const int ENEMY_COUNT = 2; //максимальное количество врагов в игре 
@@ -113,21 +115,42 @@ int main()
 			enemiesCount += 1; //увеличили счЄтчик врагов 
 	} 
 
+
 	
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как им€ файла+расширение, далее координата ’,”, ширина, высота.
 	
 
+	
+	
+
+
 
 	int createObjectForMapTimer = 0;//ѕеременна€ под врем€ дл€ генерировани€ камней
 	int createObjectForMapTimer1 = 0;//ѕеременна€ под врем€ дл€ генерировани€ камней
+	
 	while (window.isOpen())
 	{
 		float time = clock.getElapsedTime().asMicroseconds();
+		
+
+		if (p.life) gameTime =gameTimeClock.getElapsedTime().asSeconds();
 		clock.restart(); 
 		time = time / 800;
 
 
 		createObjectForMapTimer += time;//наращиваем таймер
+		if (createObjectForMapTimer>800)
+		{
+			for (it =enemies.begin();it!=enemies.end();it++)
+			{
+				if ((*it)->life){
+					Bullets2.push_back(new Bullet(BulletImage, (*it)->x, (*it)->y, 16, 16, "Bullet", (*it)->state)); 
+				}
+			}
+			createObjectForMapTimer=0;
+		}
+
+			createObjectForMapTimer += time;//наращиваем таймер
 		if (createObjectForMapTimer>2000)
 		{ 
 			randomMapGenerate();//генераци€ камней
@@ -158,18 +181,43 @@ int main()
 				{ 
 					//if (p.timeBeforeShot<500){
 					if (event.key.code == sf::Keyboard::P) 
+
 					{
 					
 					Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
 					} 
-				
+
 				}
-			}
+			} 
+					
+					
 		}
+
 			
 		
 	
 		
+
+		if (Keyboard::isKeyPressed(sf::Keyboard::Tab))//перезагружаем игру
+		{
+			return true;
+		}
+		
+		if (Keyboard::isKeyPressed(sf::Keyboard::Escape))//выходим из игры
+		{
+			return false;
+		}
+		
+		
+		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
+		
+
+		//ќ∆»¬Ћя≈ћ ¬–ј√ќ¬
+		for  (it = enemies.begin(); it != enemies.end(); it++)   
+			{   
+				(*it)->update(time); //запускаем метод update()  
+				
+			} 
 		
 		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
 		
@@ -180,7 +228,40 @@ int main()
 				(*it)->update(time); //запускаем метод update()  
 			} 
 		
+		//ќ∆»¬Ћя≈ћ ѕ”Ћ»
+		for (it = Bullets.begin(); it != Bullets.end(); it++) 
+		{ 
+			(*it)->update(time); //запускаем метод update() 
+		}
+
+
+		//ѕровер€ем список на наличие "мертвых" пуль и удал€ем их 
+		for (it = Bullets.begin(); it != Bullets.end(); )//говорим что проходимс€ от начала до конца 
+		{// если этот объект мертв, то удал€ем его 
+			if ((*it)-> life == false) 
+			{ 
+				//delete (*it);
+				it = Bullets.erase(it); 
+			} 
+			else it++; //и идем курсором (итератором) к след объекту. 
+		}
+
+
+		if (p.life == true)
+			{//если игрок жив  
+				for (it = enemies.begin(); it != enemies.end(); it++)
+					{//бежим по списку врагов   
+						if ((p.getRect().intersects((*it)->getRect())))     
+							{      
+								p.health = 0;  
+								p.life = false;
+								std::cout << "you are lose";  
+							}    
+					}  		
+		}
+	
 		
+
 		//ќ∆»¬Ћя≈ћ ѕ”Ћ»
 		for (it = Bullets.begin(); it != Bullets.end(); it++) 
 		{ 
@@ -211,18 +292,13 @@ int main()
 								std::cout << "you are lose";  
 							}    
 					}   
-				for (it = Bullets.begin(); it != Bullets.end(); it++)
-				{
-					if ((enemies.getRect().intersects((*it)->getRect()) //&&(enemies.getRect().intersecrs((*it)->getRect()))))) 
-					{
-						
-						
-					}
-				
-				}
-			} 
+		}
 		
+
+
+
 		window.clear(); 
+
 
 		/////////////////////////////–исуем карту/////////////////////
 		for (int i = 0; i < HEIGHT_MAP; i++)
@@ -265,6 +341,7 @@ int main()
 
 
 
+
 		//	for (it2 = enemies.begin(); it2 != enemies.end(); it2++)
 		//	{
 		//		if ((*it)->getRect() != (*it2)->getRect())//при этом это должны быть разные пр€моугольники
@@ -274,6 +351,17 @@ int main()
 		//			(*it)->sprite.scale(-1, 1);//отражаем спрайт по горизонтали
 			//	}
 			//}
+
+			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)
+			{
+				for (it =enemies.begin(); it !=enemies.end(); it++){
+					if ((*it)->getRect().intersects((*it2)->getRect()))
+					{
+						(*it2)->life=0;
+					}
+				}
+			}
+
 
 
 		//–»—”≈ћ ¬–ј√ќ¬
@@ -291,11 +379,32 @@ int main()
 				window.draw((*it)->sprite); //рисуем объекты
 			}
 
+
 		
+		//–»—”≈ћ ѕ”Ћ»
+		for (it = Bullets2.begin(); it != Bullets2.end(); it++) 
+			{ 
 
-
-
+				if ((*it)->life) //если пули живы 
+				window.draw((*it)->sprite); //рисуем объекты
+			}
+		
 		window.display(); 
+		
 	}
-return 0;
+
+}
+
+void gameRunning() //функци€ перезагружает игру
+{
+	if (startGame()) 
+	{
+		gameRunning();
+
+	}
+}
+int main() 
+{
+	gameRunning();
+	return 0;
 }

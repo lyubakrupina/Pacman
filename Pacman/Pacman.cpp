@@ -1,19 +1,30 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Pacman.h"
+#include "Bullet.h"
 using namespace sf;
-
+using namespace std;
 		Pacman::Pacman(Image &image, float X, float Y, int W, int H, std::string Name) :Entity(image, X, Y, W, H, Name){
-		playerScore = 0; state = stay;
-		//if (name == "Packman"){ 
+		playerScore = 0; 
+		state = stay;
+		health=100;
+		znachenie = true;
+		if (name == "Packman")
+		{ 
 			//Задаем спрайту один прямоугольник для //вывода одного игрока. IntRect – для приведения типов 
 			//image.createMaskFromColor(Color(255, 255, 255));
 		//image.createMaskFromColor(Color(0, 0, 0));
 		sprite.setTextureRect(IntRect(0, 0, w, h)); 
 			//sprite.setTextureRect(IntRect(0, 0, 40, 40));//получили нужный прямоугольник
 			
-		//}
+		}
 	}
+		Pacman::~Pacman()
+		{
+			cout << "udalilas igrok";
 		
+		}
+
 	void 	Pacman::control(){
 		/////////////////////////////Управление персонажем с анимацией///////////////////////////////
 		if (Keyboard::isKeyPressed(Keyboard::Left))
@@ -130,21 +141,28 @@ using namespace sf;
 				}
 				if (TileMap[i][j] == 'f')//таблетки
 				{
+					znachenie = false;
 					TileMap[i][j] = ' ';
 				}
+
 				if (TileMap[i][j] == 'h')//точки 
 				{
+					playerScore ++; 
 					TileMap[i][j] = ' ';
 				}
 			}
+			
+
 	}
 	
 
 	void 	Pacman::update(float time) //метод "оживления/обновления" объекта класса.
-	{
+	
+	{if (life) {//проверяем, жив ли герой
+
 		control();//функция управления персонажем 
 		switch (state)//делаются различные действия в зависимости от состояния 
-		{
+		{ 
 			case right: 
 				{
 					dx = speed; 
@@ -196,4 +214,6 @@ using namespace sf;
 		speed = 0; //обнуляем скорость, чтобы персонаж остановился. 
 		sprite.setPosition(x, y); //выводим спрайт в позицию (x, y). 
 			//бесконечно выводим в этой функции, иначе бы наш спрайт стоял на месте.
+		if (health<=0){life=false;}
+	}
 	}
