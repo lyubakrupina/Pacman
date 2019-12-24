@@ -68,7 +68,15 @@ bool startGame(){
 	text.setColor(Color::Red);//покрасили текст в красный 
 	text.setStyle(Text::Bold);//жирный текст. 
 
- 
+
+	
+    //Music music;
+	//music.openFromFile("What.ogg");
+	//music.play();
+
+
+
+
 	Image map_image;//объект изображени€ дл€ карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл дл€ карты
 	
@@ -104,6 +112,7 @@ bool startGame(){
 	const int ENEMY_COUNT = 2; //максимальное количество врагов в игре 
 	int enemiesCount = 0; 
 
+
 	for (int i = 0; i < ENEMY_COUNT; i++) 
 		{ 
 			float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ 
@@ -116,7 +125,10 @@ bool startGame(){
 	} 
 
 
-	
+
+
+
+
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как им€ файла+расширение, далее координата ’,”, ширина, высота.
 	
 
@@ -188,21 +200,19 @@ bool startGame(){
 					} 
 
 				}
-			} 
-					
+			} 				
 					
 		}
 
 			
-		
 	
-		
+	
 
 		if (Keyboard::isKeyPressed(sf::Keyboard::Tab))//перезагружаем игру
 		{
 			return true;
 		}
-		
+
 		if (Keyboard::isKeyPressed(sf::Keyboard::Escape))//выходим из игры
 		{
 			return false;
@@ -211,6 +221,7 @@ bool startGame(){
 		
 		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
 		
+
 
 		//ќ∆»¬Ћя≈ћ ¬–ј√ќ¬
 		for  (it = enemies.begin(); it != enemies.end(); it++)   
@@ -221,6 +232,7 @@ bool startGame(){
 		
 		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
 		
+
 
 		//ќ∆»¬Ћя≈ћ ¬–ј√ќ¬
 		for  (it = enemies.begin(); it != enemies.end(); it++)   
@@ -291,12 +303,10 @@ bool startGame(){
 								p.life = false;
 								std::cout << "you are lose";  
 							}    
+
 					}   
 		}
 		
-
-
-
 		window.clear(); 
 
 
@@ -326,7 +336,6 @@ bool startGame(){
 
 		
 
-
 		//“≈ —“ ¬ »√–≈ объ€вили переменную здоровь€,времени и баллов 
 		std::ostringstream playerHealthString, playerScoreString;
 		
@@ -354,7 +363,8 @@ bool startGame(){
 
 			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)
 			{
-				for (it =enemies.begin(); it !=enemies.end(); it++){
+				for (it =enemies.begin(); it !=enemies.end(); it++)
+				{
 					if ((*it)->getRect().intersects((*it2)->getRect()))
 					{
 						(*it2)->life=0;
@@ -392,8 +402,8 @@ bool startGame(){
 		window.display(); 
 		
 	}
-
 }
+
 
 void gameRunning() //функци€ перезагружает игру
 {
