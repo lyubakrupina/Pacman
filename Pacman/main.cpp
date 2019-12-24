@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <sstream>
 #include "Entity.h"
@@ -48,10 +49,11 @@ if (TileMap[randomElementY][randomElementX] == ' ') {
 }
 }
 };
-				
 
-int main() 
-{
+
+
+
+bool startGame(){
 	//—оздаЄм окно 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	//RenderWindow window(sf::VideoMode(822, 600), "Kychka-pc.ru 31");
@@ -66,8 +68,14 @@ int main()
 	Text text("",font,23);
 	text.setColor(Color::Red);//покрасили текст в красный 
 	text.setStyle(Text::Bold);//жирный текст. 
- 
- 
+
+	
+    Music music;
+	music.openFromFile("What.ogg");
+	music.play();
+
+
+
 	Image map_image;//объект изображени€ дл€ карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл дл€ карты
 	
@@ -102,6 +110,7 @@ int main()
 	const int ENEMY_COUNT = 2; //максимальное количество врагов в игре 
 	int enemiesCount = 0; 
 
+
 	for (int i = 0; i < ENEMY_COUNT; i++) 
 		{ 
 			float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ 
@@ -113,7 +122,9 @@ int main()
 			enemiesCount += 1; //увеличили счЄтчик врагов 
 	} 
 
-	
+
+
+
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как им€ файла+расширение, далее координата ’,”, ширина, высота.
 	
 
@@ -166,13 +177,24 @@ int main()
 				}
 			}
 		}
+	}
+						
 			
-		
-	
+
+		if (Keyboard::isKeyPressed(sf::Keyboard::Tab))//перезагружаем игру
+		{
+			return true;
+		}
+			
+		if (Keyboard::isKeyPressed(sf::Keyboard::Escape))//выходим из игры
+		{
+			return false;
+		}
 		
 		
 		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
 		
+
 
 		//ќ∆»¬Ћя≈ћ ¬–ј√ќ¬
 		for  (it = enemies.begin(); it != enemies.end(); it++)   
@@ -210,18 +232,11 @@ int main()
 								p.life = false;
 								std::cout << "you are lose";  
 							}    
+
 					}   
-				for (it = Bullets.begin(); it != Bullets.end(); it++)
-				{
-					if ((enemies.getRect().intersects((*it)->getRect()) //&&(enemies.getRect().intersecrs((*it)->getRect()))))) 
-					{
-						
-						
-					}
 				
-				}
-			} 
-		
+			}
+
 		window.clear(); 
 
 		/////////////////////////////–исуем карту/////////////////////
@@ -249,8 +264,6 @@ int main()
 			}
 
 		
-
-
 		//“≈ —“ ¬ »√–≈ объ€вили переменную здоровь€,времени и баллов 
 		std::ostringstream playerHealthString, gameTimeString, playerScoreString;
 		
@@ -296,6 +309,23 @@ int main()
 
 
 		window.display(); 
+		
 	}
-return 0;
+
+
+
+void gameRunning() //функци€ перезагружает игру
+{
+	if (startGame()) 
+	{
+		gameRunning();
+		
+
+	}
+}
+int main() 
+{
+	gameRunning();
+	
+	return 0;
 }

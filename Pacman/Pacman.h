@@ -10,9 +10,10 @@ using namespace sf;
 class Pacman:public Entity { // класс Pacman
 public:
 	int playerScore;//эта переменная может быть только у игрока
-
+	bool znachenie;
+	//float timeBeforeShot; //переменная - время до выстрела
 	Pacman(Image &image, float X, float Y, int W, int H, std::string Name);
-		
+	~Pacman();	
 	void control();
 	
 	//Метод проверки столкновений с элементами карты 
