@@ -68,3 +68,4 @@ if (life)
 sprite.setPosition(x + w , y + h );//задается позицию пули 
 } 
 }
+

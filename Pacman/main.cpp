@@ -49,9 +49,7 @@ if (TileMap[randomElementY][randomElementX] == ' ') {
 }
 };
 				
-
-int main() 
-{
+bool startGame(){
 	//—оздаЄм окно 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	//RenderWindow window(sf::VideoMode(822, 600), "Kychka-pc.ru 31");
@@ -158,17 +156,35 @@ int main()
 				{ 
 					//if (p.timeBeforeShot<500){
 					if (event.key.code == sf::Keyboard::P) 
-					{
+					{	
+						const int k=5;
+						for (int i = 0; i < k; i++)
+						{
+							Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
+							if (k>5)
+							{
+							  const int k=0;
+							  p.znachenie = true;
+							}
+						} 
 					
-					Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
-					} 
+					
+					}
 				
 				}
 			}
 		}
-			
 		
-	
+
+		if (Keyboard::isKeyPressed(sf::Keyboard::Tab))//перезагружаем игру
+		{
+			return true;
+		}
+		
+		if (Keyboard::isKeyPressed(sf::Keyboard::Escape))//выходим из игры
+		{
+			return false;
+		}
 		
 		
 		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
@@ -210,18 +226,9 @@ int main()
 								p.life = false;
 								std::cout << "you are lose";  
 							}    
-					}   
-			//	for (it = enemies.begin(); it != enemies.end(); it++)
-			//	{
-				//	if ((Bullets.getRect().intersects((*it)->getRect()) //&&(enemies.getRect().intersecrs((*it)->getRect()))))) 
-				//	{
-						
-						
-				//	}
-				
-			//	}
-			} 
-		
+					}  		
+		}
+	
 		window.clear(); 
 
 		/////////////////////////////–исуем карту/////////////////////
@@ -296,6 +303,21 @@ int main()
 
 
 		window.display(); 
+		
 	}
-return 0;
+
+}
+
+void gameRunning() //функци€ перезагружает игру
+{
+	if (startGame()) 
+	{
+		gameRunning();
+
+	}
+}
+int main() 
+{
+	gameRunning();
+	return 0;
 }
