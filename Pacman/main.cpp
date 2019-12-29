@@ -66,8 +66,6 @@ bool startGame(){
 	Text text("",font,23);
 	text.setColor(Color::Red);//покрасили текст в красный 
 	text.setStyle(Text::Bold);//жирный текст. 
-	
-
  
 	Image map_image;//объект изображения для карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл для карты
@@ -92,6 +90,10 @@ bool startGame(){
 	EnemyImageSh2.loadFromFile("images/PSH2.png");
 	EnemyImageSh3.loadFromFile("images/PSH3.png");
 	BulletImage.loadFromFile("images/Bullet.png");
+
+	Texture loseTexture;
+	loseTexture.loadFromFile("images/lose.png");
+	Sprite lose(loseTexture);
 
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как имя файла+расширение, далее координата Х,У, ширина, высота.
 	
@@ -276,6 +278,13 @@ bool startGame(){
 								p.health = 0;  
 								p.life = false;
 								std::cout << "you are lose";  
+
+								//вывод экрана смерти
+								lose.setPosition(0,0);
+								window.draw(lose); 
+								window.display();
+								while (!Keyboard::isKeyPressed(Keyboard::Escape));
+								startGame();
 							}    
 					}  		
 		}
