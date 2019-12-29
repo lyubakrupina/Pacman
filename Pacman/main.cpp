@@ -230,12 +230,13 @@ bool startGame(){
 			(*it)->update(time); //запускаем метод update() 
 		}
 
-		//оживляет пули врагов
-		for (it = Bullets2.begin();it !=Bullets2.end(); it++)
-		{
-			(*it)->update(time);
-		}
 
+		//ОЖИВЛЯЕМ ПУЛИ22
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++) 
+		{ 
+			(*it2)->update(time); //запускаем метод update() 
+		}
+		
 		//Проверяем список на наличие "мертвых" пуль и удаляем их 
 		for (it = Bullets.begin(); it != Bullets.end(); )//говорим что проходимся от начала до конца 
 		{// если этот объект мертв, то удаляем его 
@@ -245,6 +246,17 @@ bool startGame(){
 				it = Bullets.erase(it); 
 			} 
 			else it++; //и идем курсором (итератором) к след объекту. 
+		}
+
+		//2222
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); )//говорим что проходимся от начала до конца 
+		{// если этот объект мертв, то удаляем его 
+			if ((*it2)-> life == false) 
+			{ 
+				delete (*it2);
+				it2 = Bullets.erase(it2); 
+			} 
+			else it2++; //и идем курсором (итератором) к след объекту. 
 		}
 
 		//Проверяем список на наличие "мертвых" врагов
@@ -258,16 +270,7 @@ bool startGame(){
 			else it++; //и идем курсором (итератором) к след объекту. 
 		}
 
-		//Проверяем список на наличие "мертвых" пуль врага и удаляем их 
-		for (it = Bullets2.begin(); it != Bullets2.end(); )//говорим что проходимся от начала до конца 
-		{// если этот объект мертв, то удаляем его 
-			if ((*it)-> life == false) 
-			{ 
-				delete (*it);
-				it = Bullets2.erase(it); 
-			} 
-			else it++; //и идем курсором (итератором) к след объекту. 
-		}
+	
 
 		if (p.life == true)
 			{//если игрок жив  
@@ -284,6 +287,7 @@ bool startGame(){
 								window.draw(lose); 
 								window.display();
 								while (!Keyboard::isKeyPressed(Keyboard::Escape));
+								window.close();
 								startGame();
 							}    
 					}  		
@@ -361,12 +365,12 @@ bool startGame(){
 				window.draw((*it)->sprite); //рисуем объекты
 			}
 		
-		//РИСУЕМ ПУЛИ
-		for (it = Bullets2.begin(); it != Bullets2.end(); it++) 
+		//РИСУЕМ ПУЛИ2
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++) 
 			{ 
 
-				if ((*it)->life) //если пули живы 
-				window.draw((*it)->sprite); //рисуем объекты
+				if ((*it2)->life) //если пули живы 
+				window.draw((*it2)->sprite); //рисуем объекты
 			}
 		
 		
