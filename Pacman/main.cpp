@@ -300,6 +300,27 @@ bool startGame(){
 					}  		
 		}
 	
+		//for (it = enemies.begin(); it != enemies.end(); it++)
+		//{
+		//		for (it2 = enemies.begin(); it2 != enemies.end(); it2++)
+		//		{
+		//		if ((*it)->getRect() != (*it2)->getRect())
+		//			{
+			//					if ((*it)->getRect().intersects((*it2)->getRect()) && ((((*it)->name=="PSH1")&&((*it2)->name=="PSH2"))|| (((*it)->name=="PSH1")&&((*it2)->name=="PSH1"))||(((*it)->name=="PSH2")&&((*it2)->name=="PSH2"))|| (((*it)->name=="PSH2")&&((*it2)->name=="PSH3"))|| (((*it)->name=="PSH3")&&((*it2)->name=="PSH3"))|| (((*it)->name=="PSH1")&&((*it2)->name=="PSH3"))))
+								
+			//					{
+									
+				//		(*it)->dx*=-1;
+					//	(*it)->dy*=-1;
+					//	(*it2)->dx*=-1;
+					//	(*it2)->dy*=-1;
+					//}
+				//}
+			//	}
+		//}
+
+
+
 		if (p.health<=0)
 		{		
 				//std::cout << p.health;
