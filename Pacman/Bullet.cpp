@@ -62,7 +62,7 @@ if (life)
 	
 		for (int j = x / 40; j < (x + w) / 40; j++) 
 		{ 
-			if (TileMap[i][j] == '0' || TileMap[i][j] == 's' || TileMap[i][j]=='f' )//если элемент наш тайлик земли, то 
+			if (TileMap[i][j] == '0' || TileMap[i][j] == 's'  )//если элемент наш тайлик земли, то 
 				life = false;// то пуля умирает 
 		}
 sprite.setPosition(x + w/2 , y + h/2 );//задается позицию пули 

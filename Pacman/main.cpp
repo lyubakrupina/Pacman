@@ -150,7 +150,7 @@ bool startGame(){
 			{
 				
 				if ((*it)->life){
-					Bullets2.push_back(new Bullet(BulletImage, (*it)->x, (*it)->y, 16, 16, "Bullet", (*it)->state)); 
+					Bullets2.push_back(new Bullet(BulletImage, (*it)->x, (*it)->y, 16, 16, "Bullet", (*it)->speed)); 
 				}
 			}
 
