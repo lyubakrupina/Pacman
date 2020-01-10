@@ -73,6 +73,7 @@ using namespace std;
 			
 			{   case 0:
 					{//состояние идти вправо   
+						state=right;
 						dx = speed;   
 						CurrentFrame += 0.005*time;   
 						if (CurrentFrame > 3) CurrentFrame -= 3;  
@@ -81,6 +82,7 @@ using namespace std;
 					}   
 				case 1:
 					{//состояние идти влево   
+						state=left;
 						dx = -speed;   
 						CurrentFrame += 0.005*time;  
 						if (CurrentFrame > 3) CurrentFrame -= 3;   
@@ -88,7 +90,8 @@ using namespace std;
 						break;   
 					}   
 				case 2:
-					{//идти вверх   
+					{//идти вверх 
+						state=up;
 						dy = -speed;   
 						CurrentFrame += 0.005*time;  
 						if (CurrentFrame > 3) CurrentFrame -= 3;  
@@ -97,6 +100,7 @@ using namespace std;
 					}   
 				case 3:
 					{//идти вниз  
+						state=down;
 						dy = speed;  
 						CurrentFrame += 0.005*time;  
 						if (CurrentFrame > 3) CurrentFrame -= 3;   
