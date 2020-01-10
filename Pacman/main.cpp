@@ -11,7 +11,7 @@
 using namespace sf;//включаем пространство имен sf, чтобы постоянно не писать sf::
 
 void randomMapGenerate(){
-//рандомно расставляем камни
+//рандомно расставляем таблетки
 int randomElementX = 0;//переменная для хранения случайного элемента по горизонтали
 int randomElementY = 0;//переменная для хранения случайного элемента по вертикали
 srand(time(0));//Инициализация генератора случайных чисел
@@ -31,7 +31,7 @@ if (TileMap[randomElementY][randomElementX] == ' ') {
 
 
 void randomMapGenerate1(){
-//рандомно расставляем камни
+//рандомно расставляем место хранение пулек
 int randomElementX = 0;//переменная для хранения случайного элемента по горизонтали
 int randomElementY = 0;//переменная для хранения случайного элемента по вертикали
 srand(time(0));//Инициализация генератора случайных чисел
@@ -97,7 +97,7 @@ bool startGame(){
 	Texture winTexture;
 	winTexture.loadFromFile("images/win.png");
 	Sprite win(winTexture);
-
+	int KolPriv=0;
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как имя файла+расширение, далее координата Х,У, ширина, высота.
 	
 	std::list<Entity*> enemies;//список врагов
@@ -160,14 +160,14 @@ bool startGame(){
 			createObjectForMapTimer2 += time;//наращиваем таймер
 		if (createObjectForMapTimer2>2000)
 		{ 
-			randomMapGenerate();//генерация камней
+			randomMapGenerate();//генерация таблеток
 			createObjectForMapTimer2 = 0;//обнуляем таймер
 		}
 
 		createObjectForMapTimer1 += time;//наращиваем таймер
 		if (createObjectForMapTimer1>3000)
 		{ 
-			randomMapGenerate1();//генерация камней
+			randomMapGenerate1();//генерация хранения пулек
 			createObjectForMapTimer1 = 0;//обнуляем таймер
 		}
 	
@@ -302,7 +302,7 @@ bool startGame(){
 	
 		if (p.health<=0)
 		{		
-				std::cout << p.health;
+				//std::cout << p.health;
 				p.health = 0;  
 				p.life = false;
 				std::cout << "you are lose";  
@@ -316,27 +316,14 @@ bool startGame(){
 				startGame();
 		}
 
-		if (p.playerScore>=40)
-		{
-
-
-				//вывод экрана победы
-					
-
-				win.setPosition(0,0);
-				window.draw(win); 
-				window.display();
-				while (!Keyboard::isKeyPressed(Keyboard::Escape));
-				window.close();
-				startGame();
-			
-		}
+		
+	
 		for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
 			{
 				for (it =enemies.begin(); it !=enemies.end(); it++){//враги
 					if ((*it)->getRect().intersects((*it2)->getRect()))
 					{
-
+						KolPriv++;
 						(*it)->life=0;
 					}
 				}
@@ -366,7 +353,22 @@ bool startGame(){
 					}
 				}
 			}
+			if ((p.playerScore>=40)&& (KolPriv==6))
+					{
 
+
+							//вывод экрана победы
+					
+					//	std::cout <<"kolpriv="<<KolPriv;  
+				
+							win.setPosition(0,0);
+							window.draw(win); 
+							window.display();
+							while (!Keyboard::isKeyPressed(Keyboard::Escape));
+							window.close();
+							startGame();
+			
+					}
 		window.clear(); 
 
 
