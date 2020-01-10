@@ -94,7 +94,9 @@ bool startGame(){
 	loseTexture.loadFromFile("images/lose.png");
 	Sprite lose(loseTexture);
 
-	
+	Texture winTexture;
+	winTexture.loadFromFile("images/win.png");
+	Sprite win(winTexture);
 
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как имя файла+расширение, далее координата Х,У, ширина, высота.
 	
@@ -316,6 +318,17 @@ bool startGame(){
 
 		if (p.playerScore>=40)
 		{
+
+
+				//вывод экрана победы
+					
+
+				win.setPosition(0,0);
+				window.draw(win); 
+				window.display();
+				while (!Keyboard::isKeyPressed(Keyboard::Escape));
+				window.close();
+				startGame();
 			
 		}
 		for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
