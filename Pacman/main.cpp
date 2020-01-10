@@ -94,6 +94,8 @@ bool startGame(){
 	loseTexture.loadFromFile("images/lose.png");
 	Sprite lose(loseTexture);
 
+	
+
 	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как имя файла+расширение, далее координата Х,У, ширина, высота.
 	
 	std::list<Entity*> enemies;//список врагов
@@ -141,13 +143,15 @@ bool startGame(){
 		createObjectForMapTimer += time;//наращиваем таймер
 		if (createObjectForMapTimer>800)
 		{
+			
 			for (it =enemies.begin();it!=enemies.end();it++)
 			{
-				//(*it)->update(time);
+				
 				if ((*it)->life){
 					Bullets2.push_back(new Bullet(BulletImage, (*it)->x, (*it)->y, 16, 16, "Bullet", (*it)->state)); 
 				}
 			}
+
 			createObjectForMapTimer=0;
 		}
 
@@ -183,16 +187,16 @@ bool startGame(){
 					//if (p.timeBeforeShot<500){
 					if (event.key.code == sf::Keyboard::P) 
 					{	
-						const int k=5;
-						for (int i = 0; i < k; i++)
-						{
+						//const int k=5;
+						//for (int i = 0; i < k; i++)
+						//{
 							Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
-							if (k>5)
-							{
-							  const int k=0;
+							//if (k>5)
+							//{
+							//  const C
 							  p.znachenie = true;
-							}
-						} 
+							//}
+						//} 
 					
 					
 					}
@@ -232,9 +236,9 @@ bool startGame(){
 
 
 		//ОЖИВЛЯЕМ ПУЛИ22
-		for (it = Bullets2.begin(); it != Bullets2.end(); it++) 
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++) 
 	{ 
-			(*it)->update(time); //запускаем метод update() 
+			(*it2)->update(time); //запускаем метод update() 
 			
 		}
 		
@@ -250,14 +254,14 @@ bool startGame(){
 		}
 
 		//2222
-		for (it = Bullets2.begin(); it != Bullets2.end(); )//говорим что проходимся от начала до конца 
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); )//говорим что проходимся от начала до конца 
 		{// если этот объект мертв, то удаляем его 
-			if ((*it)-> life == false) 
+			if ((*it2)-> life == false) 
 			{ 
-				delete (*it);
-				it = Bullets2.erase(it); 
+				delete (*it2);
+				it2 = Bullets2.erase(it2); 
 			} 
-			else it++; //и идем курсором (итератором) к след объекту. 
+			else it2++; //и идем курсором (итератором) к след объекту. 
 		}
 
 		//Проверяем список на наличие "мертвых" врагов
@@ -294,7 +298,61 @@ bool startGame(){
 					}  		
 		}
 	
-		
+		if (p.health<=0)
+		{		
+				std::cout << p.health;
+				p.health = 0;  
+				p.life = false;
+				std::cout << "you are lose";  
+				
+				//вывод экрана смерти
+				lose.setPosition(0,0);
+				window.draw(lose); 
+				window.display();
+				while (!Keyboard::isKeyPressed(Keyboard::Escape));
+				window.close();
+				startGame();
+		}
+
+		if (p.playerScore>=40)
+		{
+			
+		}
+		for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
+			{
+				for (it =enemies.begin(); it !=enemies.end(); it++){//враги
+					if ((*it)->getRect().intersects((*it2)->getRect()))
+					{
+
+						(*it)->life=0;
+					}
+				}
+			}
+			//пересечение пули врага с пакманом
+			if (p.life == true)
+			{
+			for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++)//пули врагов
+			{
+					if (p.getRect().intersects((*it2)->getRect()))
+					{
+						p.health = p.health-20;  
+						//p.life=0;
+						(*it2)->life=0;
+					}
+			
+			}
+			}
+
+			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
+			{
+				for (it =Bullets2.begin(); it !=Bullets2.end(); it++){//враги
+					if ((*it)->getRect().intersects((*it2)->getRect()))
+					{
+						(*it2)->life=0;
+						(*it)->life=0;
+					}
+				}
+			}
 
 		window.clear(); 
 
@@ -340,41 +398,7 @@ bool startGame(){
 
 
 
-			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
-			{
-				for (it =enemies.begin(); it !=enemies.end(); it++){//враги
-					if ((*it)->getRect().intersects((*it2)->getRect()))
-					{
-
-						(*it)->life=0;
-					}
-				}
-			}
-			//пересечение пули врага с пакманом
-			if (p.life == true)
-			{
-			for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++)//пули врагов
-			{
-					if (p.getRect().intersects((*it2)->getRect()))
-					{
-						p.health = 0;  
-						p.life=0;
-						(*it2)->life=0;
-					}
 			
-			}
-			}
-
-			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
-			{
-				for (it =Bullets2.begin(); it !=Bullets2.end(); it++){//враги
-					if ((*it)->getRect().intersects((*it2)->getRect()))
-					{
-						(*it2)->life=0;
-						(*it)->life=0;
-					}
-				}
-			}
 		//РИСУЕМ ВРАГОВ
 		for (it = enemies.begin(); it != enemies.end(); it++)
 			{ 
@@ -391,11 +415,11 @@ bool startGame(){
 			}
 		
 		//РИСУЕМ ПУЛИ2
-		for (it = Bullets2.begin(); it != Bullets2.end(); it++) 
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++) 
 			{ 
 
-				if ((*it)->life) //если пули живы 
-				window.draw((*it)->sprite); //рисуем объекты
+				if ((*it2)->life) //если пули живы 
+				window.draw((*it2)->sprite); //рисуем объекты
 			}
 		
 		
