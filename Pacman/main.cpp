@@ -91,12 +91,6 @@ bool startGame(){
 	Clock gameTimeClock;//переменная игрового времени, будем здесь хранить время игры 
 	int gameTime = 0;//объявили игровое время, инициализировали.
 
-	std::list<Entity*> enemies;
-	std::list<Entity*>::iterator it; // список врагов
-	std::list<Entity*>::iterator it2; // для отталкивания между врагами
-	std::list<Entity*> Bullets; //список пуль
-	std::list<Entity*> Bullets2;
-
 	Image PackmanImage;
 	Image EnemyImageSh1;
 	Image EnemyImageSh2;
