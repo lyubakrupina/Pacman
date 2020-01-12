@@ -11,9 +11,8 @@
 using namespace sf;//включаем пространство имен sf, чтобы постоянно не писать sf::
 
 void randomMapGenerate(){
-//рандомно расставляем камни
-int randomElementX 
-	= 0;//переменная для хранения случайного элемента по горизонтали
+//рандомно расставляем таблетки
+int randomElementX = 0;//переменная для хранения случайного элемента по горизонтали
 int randomElementY = 0;//переменная для хранения случайного элемента по вертикали
 srand(time(0));//Инициализация генератора случайных чисел
 int countStone = 3;//количество таблеток
@@ -32,7 +31,7 @@ if (TileMap[randomElementY][randomElementX] == ' ') {
 
 
 void randomMapGenerate1(){
-//рандомно расставляем камни
+//рандомно расставляем место хранение пулек
 int randomElementX = 0;//переменная для хранения случайного элемента по горизонтали
 int randomElementY = 0;//переменная для хранения случайного элемента по вертикали
 srand(time(0));//Инициализация генератора случайных чисел
@@ -55,7 +54,6 @@ bool startGame(){
 	//int DeadEnemyGame=0;
 	//Создаём окно 
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	//RenderWindow window(sf::VideoMode(822, 600), "Kychka-pc.ru 31");
 	sf::RenderWindow window(sf::VideoMode(800, 600, desktop.bitsPerPixel), "Pacman");
 
 	
@@ -69,6 +67,7 @@ bool startGame(){
 	text.setStyle(Text::Bold);//жирный текст. 
 
 
+
 	
     //Music music;
 	//music.openFromFile("What.ogg");
@@ -76,6 +75,9 @@ bool startGame(){
 
 
 
+
+
+ 
 
 	Image map_image;//объект изображения для карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл для карты
@@ -107,10 +109,29 @@ bool startGame(){
 	EnemyImageSh3.loadFromFile("images/PSH3.png");
 	BulletImage.loadFromFile("images/Bullet.png");
 
+
+	Texture loseTexture;
+	loseTexture.loadFromFile("images/lose.png");
+	Sprite lose(loseTexture);
+
+	Texture winTexture;
+	winTexture.loadFromFile("images/win.png");
+	Sprite win(winTexture);
+	int KolPriv=0;
+	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как имя файла+расширение, далее координата Х,У, ширина, высота.
 	
+	std::list<Entity*> enemies;//список врагов
+	std::list<Entity*>::iterator it; // итератор
+	std::list<Entity*>::iterator it2; // итератор 
+	std::list<Entity*> Bullets; //список пуль
+	std::list<Entity*> Bullets2; //список пуль врага
+
+
+	
+
 	
 	const int ENEMY_COUNT = 2; //максимальное количество врагов в игре 
-	int enemiesCount = 0; 
+	int enemiesCount = 0; //текущее кол врагов в игре
 
 
 	for (int i = 0; i < ENEMY_COUNT; i++) 
@@ -118,8 +139,12 @@ bool startGame(){
 			float xr = 150 + rand() % 500; // случайная координата врага на поле игры по оси “x” 
 			float yr = 150 + rand() % 350; // случайная координата врага на поле игры по оси “y”  //создаем врагов и помещаем в список  
 			enemies.push_back(new Enemy(EnemyImageSh1, xr, yr, 40, 40, "PSH1"));  
-			enemies.push_back(new Enemy(EnemyImageSh2, xr, yr, 40, 40, "PSH2"));
-			enemies.push_back(new Enemy(EnemyImageSh3, xr, yr, 40, 40, "PSH3"));
+			float pr = 150 + rand() % 450; // случайная координата врага на поле игры по оси “x” 
+			float lr = 150 + rand() % 500;
+			enemies.push_back(new Enemy(EnemyImageSh2, pr, lr, 40, 40, "PSH2"));
+			float er = 150 + rand() % 350; // случайная координата врага на поле игры по оси “x” 
+			float dr = 150 + rand() % 460;
+			enemies.push_back(new Enemy(EnemyImageSh3, er, dr, 40, 40, "PSH3"));
 			
 			enemiesCount += 1; //увеличили счётчик врагов 
 	} 
@@ -129,17 +154,13 @@ bool startGame(){
 
 
 
-	Pacman p(PackmanImage, 80, 80, 40.0, 40.0,"Packman");//создаем объект p класса player, задаем "hero.png" как имя файла+расширение, далее координата Х,У, ширина, высота.
-	
 
-	
-	
 
 
 
 	int createObjectForMapTimer = 0;//Переменная под время для генерирования камней
 	int createObjectForMapTimer1 = 0;//Переменная под время для генерирования камней
-	
+	int createObjectForMapTimer2 = 0;//Переменная под время для генерирования камней
 	while (window.isOpen())
 	{
 		float time = clock.getElapsedTime().asMicroseconds();
@@ -153,26 +174,29 @@ bool startGame(){
 		createObjectForMapTimer += time;//наращиваем таймер
 		if (createObjectForMapTimer>2000)
 		{
+			
 			for (it =enemies.begin();it!=enemies.end();it++)
 			{
+				
 				if ((*it)->life){
 					Bullets2.push_back(new Bullet(BulletImage, (*it)->x, (*it)->y, 16, 16, "Bullet", (*it)->state)); 
 				}
 			}
+
 			createObjectForMapTimer=0;
 		}
 
-			createObjectForMapTimer += time;//наращиваем таймер
-		if (createObjectForMapTimer>2000)
+			createObjectForMapTimer2 += time;//наращиваем таймер
+		if (createObjectForMapTimer2>2000)
 		{ 
-			randomMapGenerate();//генерация камней
-			createObjectForMapTimer = 0;//обнуляем таймер
+			randomMapGenerate();//генерация таблеток
+			createObjectForMapTimer2 = 0;//обнуляем таймер
 		}
 
 		createObjectForMapTimer1 += time;//наращиваем таймер
 		if (createObjectForMapTimer1>3000)
 		{ 
-			randomMapGenerate1();//генерация камней
+			randomMapGenerate1();//генерация хранения пулек
 			createObjectForMapTimer1 = 0;//обнуляем таймер
 		}
 	
@@ -194,9 +218,15 @@ bool startGame(){
 					//if (p.timeBeforeShot<500){
 					if (event.key.code == sf::Keyboard::P) 
 
-					{
+
+			
+
+					{	
 					
-					Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
+							Bullets.push_back(new Bullet(BulletImage, p.x, p.y, 16, 16, "Bullet", p.state)); 
+							
+							  p.znachenie = true;
+											
 					} 
 
 				}
@@ -247,17 +277,47 @@ bool startGame(){
 		}
 
 
+		//ОЖИВЛЯЕМ ПУЛИ22
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++) 
+	{ 
+			(*it2)->update(time); //запускаем метод update() 
+			
+		}
+		
 		//Проверяем список на наличие "мертвых" пуль и удаляем их 
 		for (it = Bullets.begin(); it != Bullets.end(); )//говорим что проходимся от начала до конца 
 		{// если этот объект мертв, то удаляем его 
 			if ((*it)-> life == false) 
 			{ 
-				//delete (*it);
+				delete (*it);
 				it = Bullets.erase(it); 
 			} 
 			else it++; //и идем курсором (итератором) к след объекту. 
 		}
 
+		//2222
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); )//говорим что проходимся от начала до конца 
+		{// если этот объект мертв, то удаляем его 
+			if ((*it2)-> life == false) 
+			{ 
+				delete (*it2);
+				it2 = Bullets2.erase(it2); 
+			} 
+			else it2++; //и идем курсором (итератором) к след объекту. 
+		}
+
+		//Проверяем список на наличие "мертвых" врагов
+		for (it = enemies.begin(); it != enemies.end(); )//говорим что проходимся от начала до конца 
+		{// если этот объект мертв, то удаляем его 
+			if ((*it)-> life == false) 
+			{ 
+				delete (*it);
+				it = enemies.erase(it); 
+			} 
+			else it++; //и идем курсором (итератором) к след объекту. 
+		}
+
+	
 
 		if (p.life == true)
 			{//если игрок жив  
@@ -268,11 +328,77 @@ bool startGame(){
 								p.health = 0;  
 								p.life = false;
 								std::cout << "you are lose";  
+
+								//вывод экрана смерти
+								lose.setPosition(0,0);
+								window.draw(lose); 
+								window.display();
+								while (!Keyboard::isKeyPressed(Keyboard::Escape));
+								window.close();
+								startGame();
 							}    
 					}  		
 		}
 	
+	
+
+
+		if (p.health<=0)
+		{		
+				//std::cout << p.health;
+				p.health = 0;  
+				p.life = false;
+				std::cout << "you are lose";  
+				
+				//вывод экрана смерти
+				lose.setPosition(0,0);
+				window.draw(lose); 
+				window.display();
+				while (!Keyboard::isKeyPressed(Keyboard::Escape));
+				window.close();
+				startGame();
+		}
+
 		
+	
+		for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
+			{
+				for (it =enemies.begin(); it !=enemies.end(); it++){//враги
+					if ((*it)->getRect().intersects((*it2)->getRect()))
+					{
+						KolPriv++;
+						(*it)->life=0;
+					}
+				}
+			}
+			//пересечение пули врага с пакманом
+			if (p.life == true)
+			{
+			for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++)//пули врагов
+			{
+					if (p.getRect().intersects((*it2)->getRect()))
+					{
+						p.health = p.health-20;  
+						//p.life=0;
+						(*it2)->life=0;
+					}
+			
+			}
+			}
+
+			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)//пули паакмана
+			{
+				for (it =Bullets2.begin(); it !=Bullets2.end(); it++){//враги
+					if ((*it)->getRect().intersects((*it2)->getRect()))
+					{
+						(*it2)->life=0;
+						(*it)->life=0;
+					}
+				}
+			}
+			if ((p.playerScore>=40)&& (KolPriv==6))
+					{
+
 
 		//ОЖИВЛЯЕМ ПУЛИ
 		for (it = Bullets.begin(); it != Bullets.end(); it++) 
@@ -307,6 +433,21 @@ bool startGame(){
 					}   
 		}
 		
+
+
+							//вывод экрана победы
+					
+					//	std::cout <<"kolpriv="<<KolPriv;  
+				
+							win.setPosition(0,0);
+							window.draw(win); 
+							window.display();
+							while (!Keyboard::isKeyPressed(Keyboard::Escape));
+							window.close();
+							startGame();
+			
+					}
+
 		window.clear(); 
 
 
@@ -351,15 +492,7 @@ bool startGame(){
 
 
 
-		//	for (it2 = enemies.begin(); it2 != enemies.end(); it2++)
-		//	{
-		//		if ((*it)->getRect() != (*it2)->getRect())//при этом это должны быть разные прямоугольники
-		//		if (((((*it)->getRect().intersects((*it2)->getRect())) && ((*it)->name == "PSH1") && ((*it2)->name == "PSH2")) && ((*it2)->name == "PSH3")))//если столкнулись два объекта и они враги
-		//		{
-		//			(*it)->dx *= -0.05;//меняем направление движения врага
-		//			(*it)->sprite.scale(-1, 1);//отражаем спрайт по горизонтали
-			//	}
-			//}
+
 
 			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)
 			{
@@ -373,6 +506,9 @@ bool startGame(){
 			}
 
 
+
+
+			
 
 		//РИСУЕМ ВРАГОВ
 		for (it = enemies.begin(); it != enemies.end(); it++)
@@ -391,12 +527,12 @@ bool startGame(){
 
 
 		
-		//РИСУЕМ ПУЛИ
-		for (it = Bullets2.begin(); it != Bullets2.end(); it++) 
+		//РИСУЕМ ПУЛИ2
+		for (it2 = Bullets2.begin(); it2 != Bullets2.end(); it2++) 
 			{ 
 
-				if ((*it)->life) //если пули живы 
-				window.draw((*it)->sprite); //рисуем объекты
+				if ((*it2)->life) //если пули живы 
+				window.draw((*it2)->sprite); //рисуем объекты
 			}
 		
 		window.display(); 
