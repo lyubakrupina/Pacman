@@ -65,19 +65,7 @@ bool startGame(){
 	Text text("",font,23);
 	text.setColor(Color::Red);//покрасили текст в красный 
 	text.setStyle(Text::Bold);//жирный текст. 
-
-
-
-	
-    //Music music;
-	//music.openFromFile("What.ogg");
-	//music.play();
-
-
-
-
-
- 
+  
 
 	Image map_image;//объект изображени€ дл€ карты 
 	map_image.loadFromFile("images/Lanshaft 555.png");//загружаем файл дл€ карты
@@ -90,6 +78,7 @@ bool startGame(){
 	Clock clock; //создаем переменную времени и одновременно запускаем часы!
 	Clock gameTimeClock;//переменна€ игрового времени, будем здесь хранить врем€ игры 
 	int gameTime = 0;//объ€вили игровое врем€, инициализировали.
+
 
 	Image PackmanImage;
 	Image EnemyImageSh1;
@@ -133,12 +122,12 @@ bool startGame(){
 			float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ 
 			float yr = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УyФ  //создаем врагов и помещаем в список  
 			enemies.push_back(new Enemy(EnemyImageSh1, xr, yr, 40, 40, "PSH1"));  
-			float pr = 150 + rand() % 450; // случайна€ координата врага на поле игры по оси УxФ 
-			float lr = 150 + rand() % 500;
-			enemies.push_back(new Enemy(EnemyImageSh2, pr, lr, 40, 40, "PSH2"));
-			float er = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УxФ 
-			float dr = 150 + rand() % 460;
-			enemies.push_back(new Enemy(EnemyImageSh3, er, dr, 40, 40, "PSH3"));
+			//float pr = 150 + rand() % 450; // случайна€ координата врага на поле игры по оси УxФ 
+			//float lr = 150 + rand() % 500;
+			enemies.push_back(new Enemy(EnemyImageSh2, xr, yr, 40, 40, "PSH2"));
+			//float er = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УxФ 
+			//float dr = 150 + rand() % 460;
+			enemies.push_back(new Enemy(EnemyImageSh3, xr, yr, 40, 40, "PSH3"));
 			
 			enemiesCount += 1; //увеличили счЄтчик врагов 
 	} 
@@ -162,11 +151,11 @@ bool startGame(){
 
 		if (p.life) gameTime =gameTimeClock.getElapsedTime().asSeconds();
 		clock.restart(); 
-		time = time / 2000;
+		time = time / 800;
 
 
 		createObjectForMapTimer += time;//наращиваем таймер
-		if (createObjectForMapTimer>2000)
+		if (createObjectForMapTimer>800)
 		{
 			
 			for (it =enemies.begin();it!=enemies.end();it++)
@@ -205,11 +194,10 @@ bool startGame(){
 			{	
 				p.update(time); //обновл€ем его
 
-				//p.timeBeforeShot += time; //приращаем врем€ до выстрела
 				
 				if (event.type == sf::Event::KeyPressed) 
 				{ 
-					//if (p.timeBeforeShot<500){
+					
 					if (event.key.code == sf::Keyboard::P) 
 
 
@@ -254,15 +242,6 @@ bool startGame(){
 				
 			} 
 		
-		p.update(time);//оживл€ем объект УpФ класса УPlayerФ с помощью времени sfml // передава€ врем€ в качестве параметра функции update.
-		
-
-
-		//ќ∆»¬Ћя≈ћ ¬–ј√ќ¬
-		for  (it = enemies.begin(); it != enemies.end(); it++)   
-			{   
-				(*it)->update(time); //запускаем метод update()  
-			} 
 		
 		//ќ∆»¬Ћя≈ћ ѕ”Ћ»
 		for (it = Bullets.begin(); it != Bullets.end(); it++) 
@@ -394,45 +373,7 @@ bool startGame(){
 					{
 
 
-		//ќ∆»¬Ћя≈ћ ѕ”Ћ»
-		for (it = Bullets.begin(); it != Bullets.end(); it++) 
-		{ 
-			(*it)->update(time); //запускаем метод update() 
-		}
-
-
-		//ѕровер€ем список на наличие "мертвых" пуль и удал€ем их 
-		for (it = Bullets.begin(); it != Bullets.end(); )//говорим что проходимс€ от начала до конца 
-		{// если этот объект мертв, то удал€ем его 
-			if ((*it)-> life == false) 
-			{ 
-				delete (*it);
-				it = Bullets.erase(it); 
-			} 
-			else it++; //и идем курсором (итератором) к след объекту. 
-		}
-
-
-		if (p.life == true)
-			{//если игрок жив  
-				for (it = enemies.begin(); it != enemies.end(); it++)
-					{//бежим по списку врагов   
-						if ((p.getRect().intersects((*it)->getRect())))     
-							{      
-								p.health = 0;  
-								p.life = false;
-								std::cout << "you are lose";  
-							}    
-
-					}   
-		}
-		
-
-
 							//вывод экрана победы
-					
-					//	std::cout <<"kolpriv="<<KolPriv;  
-				
 							win.setPosition(0,0);
 							window.draw(win); 
 							window.display();
@@ -472,12 +413,12 @@ bool startGame(){
 		
 
 		//“≈ —“ ¬ »√–≈ объ€вили переменную здоровь€,времени и баллов 
-		std::ostringstream playerHealthString, playerScoreString;
+		std::ostringstream playerHealthString, gameTimeString, playerScoreString;
 		
 		playerHealthString << p.health; 
-		 //формируем строку 
+		 gameTimeString << gameTime; //формируем строку //формируем строку 
 		playerScoreString << p.playerScore; 
-		text.setString("«доровье: " + playerHealthString.str() +  "\nЅаллы: " + playerScoreString.str());//задаем строку тексту 
+		text.setString("«доровье: " + playerHealthString.str() + "\n¬рем€ игры: " + gameTimeString.str() + "\nЅаллы: " + playerScoreString.str());//задаем строку тексту 
 		text.setPosition(3, 0);//задаем позицию текста 
 		window.draw(text);//рисуем этот текст
 		window.draw(p.sprite);//выводим спрайт на экран
@@ -487,17 +428,6 @@ bool startGame(){
 
 
 
-
-			for (it2 = Bullets.begin(); it2 != Bullets.end(); it2++)
-			{
-				for (it =enemies.begin(); it !=enemies.end(); it++)
-				{
-					if ((*it)->getRect().intersects((*it2)->getRect()))
-					{
-						(*it2)->life=0;
-					}
-				}
-			}
 
 
 
