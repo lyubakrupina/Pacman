@@ -109,7 +109,6 @@ bool startGame(){
 
 	
 	
-	
 	const int ENEMY_COUNT = 2; //максимальное количество врагов в игре 
 	int enemiesCount = 0; //текущее кол врагов в игре
 
@@ -118,14 +117,16 @@ bool startGame(){
 			float xr = 150 + rand() % 500; // случайна€ координата врага на поле игры по оси УxФ 
 			float yr = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УyФ  //создаем врагов и помещаем в список  
 			enemies.push_back(new Enemy(EnemyImageSh1, xr, yr, 40, 40, "PSH1"));  
-			enemies.push_back(new Enemy(EnemyImageSh2, xr, yr, 40, 40, "PSH2"));
-			enemies.push_back(new Enemy(EnemyImageSh3, xr, yr, 40, 40, "PSH3"));
+			float pr = 150 + rand() % 450; // случайна€ координата врага на поле игры по оси УxФ 
+			float lr = 150 + rand() % 500;
+			enemies.push_back(new Enemy(EnemyImageSh2, pr, lr, 40, 40, "PSH2"));
+			float er = 150 + rand() % 350; // случайна€ координата врага на поле игры по оси УxФ 
+			float dr = 150 + rand() % 460;
+			enemies.push_back(new Enemy(EnemyImageSh3, er, dr, 40, 40, "PSH3"));
 			
 			enemiesCount += 1; //увеличили счЄтчик врагов 
 	} 
 
-	
-	
 	
 
 
